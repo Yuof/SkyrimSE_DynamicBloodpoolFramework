@@ -201,18 +201,13 @@ namespace BloodPoolCore
 			const auto& tes = RE::TES::GetSingleton();
 			if (!tes) return false;
 
+			auto* cell = tes->interiorCell;
 			if (auto* ref = MiscUtils::GetValidReference(MiscUtils::ResolveHandle(p.refHandle), true)) {
-				auto* refCell = ref->GetParentCell();
-				if (!refCell || !refCell->IsAttached()) return false;
-
-				if (refCell->IsInteriorCell()) {
-					p.cell = refCell;
-					return true;
-				}
+				cell = ref->GetParentCell();
+				if (!cell || !cell->IsAttached()) return false;
 			}
 
-			auto* cell = tes->interiorCell;
-			if (cell && cell->IsAttached()) {
+			if (cell && cell->IsAttached() && cell->IsInteriorCell()) {
 				p.cell = cell;
 				return true;
 			}
